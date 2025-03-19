@@ -4,6 +4,7 @@ import (
 	"golang-shop/internal/handler"
 	"golang-shop/internal/repository"
 	"golang-shop/internal/services"
+	"golang-shop/middleware"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -18,9 +19,16 @@ func ApiRouter(db *gorm.DB) *gin.Engine {
 
 	v1 := router.Group("v1")
 	{
-		v1.POST("/user", userHandler.CreateUser)
-		v1.GET("/user", userHandler.TestApi)
-		v1.POST("/login", userHandler.Login)
+		v1.GET("/validate", middleware.RequireAuth, middleware.ValidateUser)
+
+		user := v1.Group("/user")
+		{
+			user.POST("/", userHandler.CreateUser)
+			user.GET("/", userHandler.TestApi)
+			user.POST("/login", userHandler.Login)
+			user.GET("/:id", middleware.RequireAuth, userHandler.GetUserById)
+		}
+
 	}
 
 	return router

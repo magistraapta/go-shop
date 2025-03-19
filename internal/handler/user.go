@@ -5,6 +5,7 @@ import (
 	"golang-shop/internal/model"
 	"golang-shop/internal/services"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -77,5 +78,28 @@ func (h *UserHandler) Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"accessToken": token,
+	})
+}
+
+func (h *UserHandler) GetUserById(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "Failed to get id",
+		})
+	}
+
+	user, err := h.services.GetUserById(id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "Failed to get user",
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"msg":  "Success",
+		"user": user,
 	})
 }
