@@ -51,6 +51,6 @@ func (s *UserService) Login(userLogin dto.UserLogin) (string, error) {
 	return tokenString, nil
 }
 
-func (s *UserService) GetUserById(id int) (*dto.GetUserResponse, error) {
+func (s *UserService) GetUserById(id int) (*dto.UserResponse, error) {
 	return s.repo.GetUserById(id)
 }
