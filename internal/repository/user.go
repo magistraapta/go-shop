@@ -35,7 +35,7 @@ func (r *UserRepository) Login(loginRequest dto.UserLogin) (*model.User, error) 
 	return &user, nil
 }
 
-func (r *UserRepository) GetUserById(id int) (*dto.GetUserResponse, error) {
+func (r *UserRepository) GetUserById(id int) (*dto.UserResponse, error) {
 	var user model.User
 
 	result := r.db.Find(&user, id)
@@ -44,9 +44,11 @@ func (r *UserRepository) GetUserById(id int) (*dto.GetUserResponse, error) {
 		return nil, result.Error
 	}
 
-	userResponse := dto.GetUserResponse{
-		Username: user.Username,
-		Email:    user.Email,
+	userResponse := dto.UserResponse{
+		Username:  user.Username,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
 	}
 
 	return &userResponse, nil
