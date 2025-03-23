@@ -6,3 +6,4 @@
 - [ ] Write test
 - [ ] Setup Docker
 - [ ] Setup Github Actions
+- [ ] Create API Docs using Swagger
