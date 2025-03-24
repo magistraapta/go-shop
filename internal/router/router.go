@@ -13,6 +13,9 @@ import (
 func ApiRouter(db *gorm.DB) *gin.Engine {
 	router := gin.Default()
 
+	router.LoadHTMLGlob("internal/templates/*")
+	router.Static("/static", "./internal/static")
+
 	userRepo := repository.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
@@ -24,6 +27,11 @@ func ApiRouter(db *gorm.DB) *gin.Engine {
 	cartRepo := repository.NewCartRepository(db)
 	cartServices := services.NewCartServices(cartRepo)
 	cartHandler := handler.NewCartHandler(cartServices)
+
+	htmlHanlder := handler.NewHtmlHandler(userService, productServices)
+
+	router.GET("/", htmlHanlder.RenderHome)
+	router.GET("/product/:id", htmlHanlder.ProductDetail)
 
 	v1 := router.Group("v1")
 	{

@@ -1,0 +1,97 @@
+package components
+
+templ Navbar() {
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <!-- Brand/logo -->
+      <a class="navbar-brand" href="/">
+        <img src="/api/placeholder/30/30" alt="ShopLogo" width="30" height="30" class="d-inline-block align-text-top me-2" />
+        GoShop
+      </a>
+      
+      <!-- Mobile toggle button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar links and search -->
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <!-- Category links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/clothing">Clothing</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/electronics">Electronics</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/home">Home & Garden</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              More
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="moreDropdown">
+              <li><a class="dropdown-item" href="/categories/books">Books</a></li>
+              <li><a class="dropdown-item" href="/categories/toys">Toys</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="/categories/all">All Categories</a></li>
+            </ul>
+          </li>
+        </ul>
+        
+        <!-- Search box -->
+        <form class="d-flex my-2 my-lg-0 me-lg-3">
+          <div class="input-group">
+            <input 
+              type="search" 
+              class="form-control" 
+              placeholder="Search products..." 
+              aria-label="Search" 
+              name="searchQuery"
+              hx-get="/api/search" 
+              hx-trigger="keyup changed delay:500ms, search" 
+              hx-target="#search-results"
+            />
+            <button class="btn btn-outline-primary" type="submit">
+              Search
+            </button>
+          </div>
+        </form>
+        
+        <!-- User actions -->
+        <div class="d-flex align-items-center">
+          <!-- Search results dropdown -->
+          <div id="search-results" class="position-absolute top-100 start-50 translate-middle-x bg-white shadow rounded" style="z-index: 1000; min-width: 300px; display: none;"></div>
+          
+          <!-- Cart -->
+          <div class="position-relative me-3">
+            <a href="/cart" class="btn btn-outline-dark">
+              <i class="bi bi-cart"></i>
+              <span class="ms-1 d-none d-md-inline">Cart</span>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                3
+                <span class="visually-hidden">items in cart</span>
+              </span>
+            </a>
+          </div>
+          
+          <!-- Account -->
+          <div class="dropdown">
+            <button class="btn btn-outline-dark dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person"></i>
+              <span class="ms-1 d-none d-md-inline">Account</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+              <li><a class="dropdown-item" href="/account/profile">My Profile</a></li>
+              <li><a class="dropdown-item" href="/account/orders">My Orders</a></li>
+              <li><a class="dropdown-item" href="/account/wishlist">Wishlist</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+}
