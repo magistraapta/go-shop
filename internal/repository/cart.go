@@ -87,3 +87,20 @@ func (r *CartRepository) UpdateItemQuantity(productID uint, cartID uint, quantit
 		Where("cart_id = ? AND product_id = ?", cartID, productID).
 		Update("quantity", quantity).Error
 }
+
+func (r *CartRepository) GetCartByUserID(userID uint) (model.Cart, error) {
+	var cart model.Cart
+	if err := r.db.Preload("Items").Where("user_id = ?", userID).First(&cart).Error; err != nil {
+		return model.Cart{}, err
+	}
+
+	return cart, nil
+}
+
+func (r *CartRepository) ClearCart(cartID uint) error {
+	if err := r.db.Where("cart_id = ?", cartID).Delete(&model.CartItem{}).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

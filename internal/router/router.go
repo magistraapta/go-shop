@@ -6,15 +6,14 @@ import (
 	"golang-shop/internal/services"
 	"golang-shop/middleware"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func ApiRouter(db *gorm.DB) *gin.Engine {
 	router := gin.Default()
-
-	router.LoadHTMLGlob("internal/templates/*")
-	router.Static("/static", "./internal/static")
+	router.Use(cors.Default())
 
 	userRepo := repository.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
@@ -27,6 +26,11 @@ func ApiRouter(db *gorm.DB) *gin.Engine {
 	cartRepo := repository.NewCartRepository(db)
 	cartServices := services.NewCartServices(cartRepo)
 	cartHandler := handler.NewCartHandler(cartServices)
+
+	transactionRepo := repository.NewTransactionRepository(db)
+
+	checkoutServices := services.NewCheckoutServices(cartRepo, productRepo, transactionRepo)
+	checkoutHandler := handler.NewCheckoutHandler(checkoutServices)
 
 	htmlHanlder := handler.NewHtmlHandler(userService, productServices)
 
@@ -60,6 +64,11 @@ func ApiRouter(db *gorm.DB) *gin.Engine {
 			cart.POST("/add", middleware.RequireAuth, cartHandler.AddToCart)
 			cart.DELETE("/item/:id", middleware.RequireAuth, cartHandler.RemoveItem)
 			cart.PUT("/item/:id", middleware.RequireAuth, cartHandler.UpdateQuantity)
+		}
+
+		transaction := v1.Group("/transaction")
+		{
+			transaction.POST("/:id", middleware.RequireAuth, checkoutHandler.Checkout)
 		}
 
 	}

@@ -73,3 +73,13 @@ func (r *ProductRepository) UpdateProduct(productID uint, updateRequest model.Pr
 	// Return the actual updated product
 	return &product, nil
 }
+
+func (r *ProductRepository) UpdateProductStock(productID uint, quantity int) error {
+	if err := r.db.Model(&model.Product{}).
+		Where("id = ?", productID).
+		Update("stock", gorm.Expr("stock - ?", quantity)).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

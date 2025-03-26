@@ -107,3 +107,7 @@ func (s *CartServices) UpdateQuantity(userID, productID uint, quantity int) erro
 
 	return s.repo.UpdateItemQuantity(productID, cart.ID, quantity)
 }
+
+func (s *CartServices) GetCartByUserId(userID uint) (model.Cart, error) {
+	return s.repo.GetCartByUserID(userID)
+}

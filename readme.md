@@ -1,8 +1,9 @@
 # Go-Shop Backend
 
 # Todo
-- [ ] Create frontend page
-- [ ] complete CRUD operation on product
+- [x] complete CRUD operation on product
+- [ ] add checkout feature
+- [ ] add transaction model
 - [ ] Write test
 - [ ] Setup Docker
 - [ ] Setup Github Actions
