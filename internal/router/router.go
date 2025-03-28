@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"gorm.io/gorm"
 )
 
@@ -36,6 +37,7 @@ func ApiRouter(db *gorm.DB) *gin.Engine {
 
 	router.GET("/", htmlHanlder.RenderHome)
 	router.GET("/product/:id", htmlHanlder.ProductDetail)
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	v1 := router.Group("v1")
 	{
