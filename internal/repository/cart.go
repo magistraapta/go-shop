@@ -24,23 +24,25 @@ func (r *CartRepository) FindOrCreateCart(userID uint) (*model.Cart, error) {
 	*/
 	var cart model.Cart
 
-	result := r.db.Where("user_id = ?", userID).First(&cart)
-
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			newCart := model.Cart{
-				UserID: userID,
-			}
-			if err := r.db.Create(&newCart).Error; err != nil {
-				return nil, err
-			}
-
-			return &newCart, nil
-		}
-		return nil, result.Error
+	// Try to find an existing cart
+	err := r.db.Where("user_id = ?", userID).First(&cart).Error
+	if err == nil {
+		// Cart already exists, return it
+		return &cart, nil
 	}
 
-	return &cart, nil
+	// If error is not "record not found", return the error
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+
+	// If no existing cart, create a new one
+	newCart := model.Cart{UserID: userID}
+	if err := r.db.Create(&newCart).Error; err != nil {
+		return nil, err
+	}
+
+	return &newCart, nil
 }
 
 func (r *CartRepository) AddToCart(cartID uint, item model.CartItem) error {

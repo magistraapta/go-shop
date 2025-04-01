@@ -35,7 +35,17 @@ func (h *CheckoutHandler) Checkout(c *gin.Context) {
 		})
 	}
 
-	err := h.checkoutService.CheckoutService(userID.ID)
+	var request struct {
+		PaymentMethod string `json:"payment_method" binding"required"`
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid payment method",
+		})
+	}
+
+	err := h.checkoutService.CheckoutService(userID.ID, request.PaymentMethod)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

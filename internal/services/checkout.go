@@ -16,7 +16,7 @@ func NewCheckoutServices(cartRepo *repository.CartRepository, productRepo *repos
 	return &CheckoutService{cartRepo: cartRepo, productRepo: productRepo, transactionRepo: transactionRepo}
 }
 
-func (s *CheckoutService) CheckoutService(userID uint) error {
+func (s *CheckoutService) CheckoutService(userID uint, payment string) error {
 	cart, err := s.cartRepo.GetCartByUserID(userID)
 
 	if err != nil {
@@ -30,18 +30,18 @@ func (s *CheckoutService) CheckoutService(userID uint) error {
 	var totalPrice float64
 	var orderItems []model.OrderItem
 
-	for _, item := range orderItems {
+	for _, item := range cart.Items {
 		err := s.productRepo.UpdateProductStock(item.ProductID, item.Quantity)
 		if err != nil {
 			return errors.New("Failed to update product stock")
 		}
 
-		totalPrice += float64(item.Quantity) * item.PriceAtTime
+		totalPrice += float64(item.Quantity) * item.Price
 
 		orderItems = append(orderItems, model.OrderItem{
 			ProductID:   item.ProductID,
 			Quantity:    item.Quantity,
-			PriceAtTime: item.PriceAtTime,
+			PriceAtTime: item.Price,
 		})
 	}
 
@@ -50,7 +50,7 @@ func (s *CheckoutService) CheckoutService(userID uint) error {
 		TotalPrice: totalPrice,
 	}
 
-	err = s.transactionRepo.CreateTransaction(transaction, orderItems)
+	err = s.transactionRepo.CreateTransaction(transaction, orderItems, payment)
 
 	if err != nil {
 		return errors.New("failed to add items to cart")

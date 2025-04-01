@@ -10,11 +10,12 @@ import (
 )
 
 type CartServices struct {
-	repo *repository.CartRepository
+	repo        *repository.CartRepository
+	productRepo *repository.ProductRepository
 }
 
-func NewCartServices(repo *repository.CartRepository) *CartServices {
-	return &CartServices{repo: repo}
+func NewCartServices(repo *repository.CartRepository, productRepo *repository.ProductRepository) *CartServices {
+	return &CartServices{repo: repo, productRepo: productRepo}
 }
 
 func (s *CartServices) AddToCart(userID uint, request dto.AddToCartRequest) error {
@@ -22,7 +23,13 @@ func (s *CartServices) AddToCart(userID uint, request dto.AddToCartRequest) erro
 	cart, err := s.repo.FindOrCreateCart(userID)
 
 	if err != nil {
-		return nil
+		return err
+	}
+
+	product, err := s.productRepo.GetProductById(int(request.ProductID))
+
+	if err != nil {
+		return err
 	}
 
 	// check if item is already on cart
@@ -45,7 +52,7 @@ func (s *CartServices) AddToCart(userID uint, request dto.AddToCartRequest) erro
 		CartID:    cart.ID,
 		ProductID: request.ProductID,
 		Quantity:  request.Quantity,
-		Price:     request.Price,
+		Price:     product.Price,
 	}
 
 	return s.repo.AddToCart(cart.ID, newItem)

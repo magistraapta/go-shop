@@ -25,7 +25,7 @@ func ApiRouter(db *gorm.DB) *gin.Engine {
 	productHandler := handler.NewProductHandler(productServices)
 
 	cartRepo := repository.NewCartRepository(db)
-	cartServices := services.NewCartServices(cartRepo)
+	cartServices := services.NewCartServices(cartRepo, productRepo)
 	cartHandler := handler.NewCartHandler(cartServices)
 
 	transactionRepo := repository.NewTransactionRepository(db)
@@ -70,7 +70,7 @@ func ApiRouter(db *gorm.DB) *gin.Engine {
 
 		transaction := v1.Group("/transaction")
 		{
-			transaction.POST("/:id", middleware.RequireAuth, checkoutHandler.Checkout)
+			transaction.POST("/", middleware.RequireAuth, checkoutHandler.Checkout)
 		}
 
 	}
