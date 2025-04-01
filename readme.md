@@ -1,7 +1,7 @@
 # Go-Shop Backend
 
 ## Entity Relationship Diagram
-![ER Diagram](golang-shop/images/ERD.png)
+![ER Diagram](https://github.com/magistraapta/go-shop/blob/ea26075301cca3536d30420fc05564d7c01186c0/images/ERD.png)
 
 # Todo
 - [x] complete CRUD operation on product
