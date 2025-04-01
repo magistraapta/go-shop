@@ -1,5 +1,8 @@
 # Go-Shop Backend
 
+## Entity Relationship Diagram
+![[golang-shop/images/ERD.png]]
+
 # Todo
 - [x] complete CRUD operation on product
 - [ ] add checkout feature
