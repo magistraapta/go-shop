@@ -1,7 +1,9 @@
 package model
 
+import "gorm.io/gorm"
+
 type CartItem struct {
-	ID        uint    `json:"id" gorm:"primaryKey"`
+	gorm.Model
 	CartID    uint    `json:"cart_id" gorm:"index"`
 	ProductID uint    `json:"product_id" gorm:"index"`
 	Quantity  int     `json:"quantity"`
