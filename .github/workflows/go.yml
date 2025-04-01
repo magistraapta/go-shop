@@ -6,6 +6,9 @@ name: Go
 on:
   push:
     branches: [ "master", "dev" ]
+    
+    paths-ignore:
+      - 'README.md'
   pull_request:
     branches: [ "master" ]
 
@@ -23,7 +26,7 @@ jobs:
 
     - name: Build
       run: go build -v ./...
-      
+
   test:
     runs-on: ubuntu-latest
     needs: build  # Ensures tests run after build
