@@ -5,7 +5,7 @@ name: Go
 
 on:
   push:
-    branches: [ "master", "dev" ]
+    branches: [ "master" ]
     
     paths-ignore:
       - 'README.md'
