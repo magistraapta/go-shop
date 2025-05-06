@@ -40,18 +40,16 @@ services:
       - DATABASE_CONFIG=host=db user=postgres password=postgres dbname=golang-shop port=5432 sslmode=disable
     networks:
     - app-network
-      # POSTGRES_USER: ${POSTGRES_USER}
-      # POSTGRES_DB: ${POSTGRES_DB}
-      # POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
 
   db:
     image: postgres:16
     restart: always
     container_name: postgres
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: golang-shop
     ports:
       - "5432:5432"
     healthcheck:

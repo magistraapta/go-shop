@@ -6,7 +6,6 @@ import (
 	"golang-shop/internal/services"
 	"golang-shop/middleware"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"gorm.io/gorm"
@@ -14,7 +13,12 @@ import (
 
 func ApiRouter(db *gorm.DB) *gin.Engine {
 	router := gin.Default()
-	router.Use(cors.Default())
+
+	middleware.PrometheusInit()
+
+	router.Use(middleware.TrackMetrics())
+
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	userRepo := repository.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
@@ -32,12 +36,6 @@ func ApiRouter(db *gorm.DB) *gin.Engine {
 
 	checkoutServices := services.NewCheckoutServices(cartRepo, productRepo, transactionRepo)
 	checkoutHandler := handler.NewCheckoutHandler(checkoutServices)
-
-	htmlHanlder := handler.NewHtmlHandler(userService, productServices)
-
-	router.GET("/", htmlHanlder.RenderHome)
-	router.GET("/product/:id", htmlHanlder.ProductDetail)
-	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	v1 := router.Group("v1")
 	{
