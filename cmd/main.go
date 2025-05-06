@@ -4,20 +4,11 @@ import (
 	"golang-shop/initializers"
 	"golang-shop/internal/router"
 	"log"
-
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
 )
-
-var counter = promauto.NewCounter(prometheus.CounterOpts{
-	Name: "go_shop_counter",
-	Help: "Counting the total number of requets being handled",
-})
 
 func init() {
 	initializers.LoadEnv()
 	initializers.ConnectDatabase()
-	initializers.SyncDatabase()
 }
 
 func main() {
