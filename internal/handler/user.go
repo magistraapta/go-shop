@@ -1,13 +1,14 @@
 package handler
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"golang-shop/internal/dto"
 	"golang-shop/internal/model"
 	"golang-shop/internal/services"
 	"net/http"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -63,7 +64,6 @@ func (h *UserHandler) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"err": "Invalid request body",
 		})
-
 		return
 	}
 

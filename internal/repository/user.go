@@ -25,7 +25,7 @@ func (r *UserRepository) CreateUser(userRequest model.User) error {
 	return nil
 }
 
-func (r *UserRepository) Login(loginRequest dto.UserLogin) (*model.User, error) {
+func (r *UserRepository) CheckUserExist(loginRequest dto.UserLogin) (*model.User, error) {
 	var user model.User
 
 	if err := r.db.Where("email = ?", loginRequest.Email).First(&user).Error; err != nil {

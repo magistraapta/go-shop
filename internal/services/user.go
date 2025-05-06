@@ -25,15 +25,15 @@ func (s *UserService) CreateUser(userRequest model.User) error {
 }
 
 func (s *UserService) Login(userLogin dto.UserLogin) (string, error) {
-	// get user
-	user, err := s.repo.Login(userLogin)
+	// get user if exist
+	user, err := s.repo.CheckUserExist(userLogin)
 	if err != nil {
-		return "", errors.New("Invalid email")
+		return "", errors.New("invalid email")
 	}
 
 	// hash user password
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userLogin.Password)); err != nil {
-		return "", errors.New("Failed to compare password")
+		return "", errors.New("failed to compare password")
 	}
 	// sign jwt
 
@@ -45,7 +45,7 @@ func (s *UserService) Login(userLogin dto.UserLogin) (string, error) {
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
 
 	if err != nil {
-		return "", errors.New("Failed to create JWT Token")
+		return "", errors.New("failed to create JWT Token")
 	}
 
 	return tokenString, nil
