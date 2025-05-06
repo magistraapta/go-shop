@@ -1,6 +1,7 @@
 package initializers
 
 import (
+	"golang-shop/internal/model"
 	"log"
 	"os"
 
@@ -22,6 +23,19 @@ func ConnectDatabase() (*gorm.DB, error) {
 	if err != nil {
 		log.Println("Failed Connect to Database ", err)
 		return nil, err
+	}
+
+	if db != nil {
+		err = db.AutoMigrate(
+			&model.User{}, &model.Product{},
+			&model.Cart{}, &model.CartItem{},
+			&model.Transaction{}, &model.OrderItem{},
+			&model.Payment{},
+		)
+		if err != nil {
+			log.Println("AutoMigrate failed: ", err)
+			return nil, err
+		}
 	}
 
 	log.Println("Connected to database")
