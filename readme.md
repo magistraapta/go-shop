@@ -10,6 +10,20 @@ Go-Shop is a robust e-commerce backend service built with Go, implementing a lay
 - Transaction management
 - Role-based access control (Admin/User)
 
+## Project Structure
+While the codebase is organized into separate modules (auth, product, cart, order) for better maintainability and separation of concerns, Go-Shop is implemented as a monolithic application. This means:
+
+- All components are deployed as a single unit
+- Modules share the same database and resources
+- Direct communication between modules through function calls
+- Single codebase and deployment pipeline
+
+This monolithic approach was chosen for:
+- Simpler deployment and maintenance
+- Easier development and debugging
+- Reduced operational complexity
+- Better performance for smaller to medium-scale applications
+
 ## Architecture
 This layered architecture provides several benefits:
 - Separation of concerns
