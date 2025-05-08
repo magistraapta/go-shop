@@ -2,8 +2,13 @@ package main
 
 import (
 	"golang-shop/initializers"
-	"golang-shop/internal/router"
+	"golang-shop/internal/auth"
+	"golang-shop/internal/cart"
+	"golang-shop/internal/order"
+	"golang-shop/internal/product"
 	"log"
+
+	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -18,7 +23,11 @@ func main() {
 		log.Println("Failed to connect database")
 	}
 
-	router := router.ApiRouter(db)
+	router := gin.Default()
+	auth.SetupAuth(router, db)
+	product.ProductRouter(router, db)
+	order.SetupOrder(router, db)
+	cart.SetupCart(router, db)
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatalf("Failed to connect to server: %v", err)

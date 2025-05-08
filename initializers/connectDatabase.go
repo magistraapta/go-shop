@@ -1,9 +1,13 @@
 package initializers
 
 import (
-	"golang-shop/internal/model"
 	"log"
 	"os"
+
+	userModel "golang-shop/internal/auth/model"
+	cartModel "golang-shop/internal/cart/model"
+	transactionModel "golang-shop/internal/order/model"
+	productModel "golang-shop/internal/product/model"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -27,10 +31,10 @@ func ConnectDatabase() (*gorm.DB, error) {
 
 	if db != nil {
 		err = db.AutoMigrate(
-			&model.User{}, &model.Product{},
-			&model.Cart{}, &model.CartItem{},
-			&model.Transaction{}, &model.OrderItem{},
-			&model.Payment{},
+			&userModel.User{}, &productModel.Product{},
+			&cartModel.Cart{}, &cartModel.CartItem{},
+			&transactionModel.Transaction{}, &transactionModel.OrderItem{},
+			&transactionModel.Payment{},
 		)
 		if err != nil {
 			log.Println("AutoMigrate failed: ", err)
