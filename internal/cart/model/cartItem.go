@@ -1,9 +1,9 @@
 package model
 
-import "gorm.io/gorm"
-
+// CartItem represents the cart item model
+// @Description Cart item model
 type CartItem struct {
-	gorm.Model
+	ID        uint    `gorm:"primarykey" json:"id"`
 	CartID    uint    `json:"cart_id" gorm:"index"`
 	ProductID uint    `json:"product_id" gorm:"index"`
 	Quantity  int     `json:"quantity"`

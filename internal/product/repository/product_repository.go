@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"golang-shop/internal/product/dto"
 	"golang-shop/internal/product/model"
 
 	"gorm.io/gorm"
@@ -14,7 +15,7 @@ func NewProductRepository(db *gorm.DB) *ProductRepository {
 	return &ProductRepository{db: db}
 }
 
-func (r *ProductRepository) CreateProduct(productRequest model.Product) error {
+func (r *ProductRepository) CreateProduct(productRequest dto.ProductRequest) error {
 	result := r.db.Create(&productRequest)
 
 	if result.Error != nil {

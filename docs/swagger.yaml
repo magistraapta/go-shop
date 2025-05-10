@@ -1,0 +1,505 @@
+basePath: /api/v1
+definitions:
+  dto.AddToCartRequest:
+    description: Add to cart request
+    properties:
+      product_id:
+        type: integer
+      quantity:
+        minimum: 1
+        type: integer
+    required:
+    - product_id
+    - quantity
+    type: object
+  dto.AuthResponse:
+    description: Auth response
+    properties:
+      message:
+        type: string
+    type: object
+  dto.CartResponse:
+    description: Cart response
+    properties:
+      message:
+        type: string
+    type: object
+  dto.CheckoutRequest:
+    description: Checkout request
+    properties:
+      payment_method:
+        type: string
+    required:
+    - payment_method
+    type: object
+  dto.LoginRequest:
+    description: Login request
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.Message:
+    description: Message response
+    properties:
+      message:
+        type: string
+    type: object
+  dto.OrderMessage:
+    description: Message response
+    properties:
+      message:
+        type: string
+    type: object
+  dto.ProductRequest:
+    description: Product request
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      stock:
+        type: integer
+    required:
+    - name
+    - price
+    - stock
+    type: object
+  dto.ProductResponse:
+    description: Product response
+    properties:
+      data:
+        $ref: '#/definitions/model.Product'
+      message:
+        type: string
+    type: object
+  dto.ProductResponseList:
+    description: Product response list
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
+      message:
+        type: string
+    type: object
+  dto.RegisterRequest:
+    description: Registration request
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  dto.UpdateQuantityRequest:
+    description: Update quantity request
+    properties:
+      product_id:
+        type: integer
+      quantity:
+        minimum: 1
+        type: integer
+    required:
+    - product_id
+    - quantity
+    type: object
+  model.Product:
+    description: Product model
+    properties:
+      created_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+      deleted_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+      description:
+        example: Description of Product 1
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Product 1
+        type: string
+      price:
+        example: 10000
+        type: number
+      stock:
+        example: 10
+        type: integer
+      updated_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample E-Commerce API sample.
+  title: E-Commerce API
+  version: "1.0"
+paths:
+  /admin/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new admin
+      parameters:
+      - description: Register Request
+        in: body
+        name: username
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.AuthResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.AuthResponse'
+      summary: Register Admin
+      tags:
+      - auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login to the system
+      parameters:
+      - description: Login Request
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.AuthResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.AuthResponse'
+      summary: Login
+      tags:
+      - auth
+  /cart:
+    get:
+      consumes:
+      - application/json
+      description: Get all items in the cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CartResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.CartResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.CartResponse'
+      summary: Get cart items
+      tags:
+      - cart
+    put:
+      consumes:
+      - application/json
+      description: Update the quantity of a product in the cart
+      parameters:
+      - description: Update quantity request
+        in: body
+        name: updateQuantityRequest
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateQuantityRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CartResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.CartResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.CartResponse'
+      summary: Update quantity
+      tags:
+      - cart
+  /cart/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove an item from the cart
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Remove item
+      tags:
+      - cart
+  /cart/add:
+    post:
+      consumes:
+      - application/json
+      description: Add a product to the cart
+      parameters:
+      - description: Add to cart request
+        in: body
+        name: addToCartRequest
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AddToCartRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CartResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.CartResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.CartResponse'
+      summary: Add to cart
+      tags:
+      - cart
+  /order/checkout:
+    post:
+      consumes:
+      - application/json
+      description: Checkout
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Checkout
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CheckoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OrderMessage'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.OrderMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.OrderMessage'
+      summary: Checkout
+      tags:
+      - order
+  /product:
+    get:
+      consumes:
+      - application/json
+      description: Get all products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ProductResponseList'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Message'
+      summary: Get All Product
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Create a new product
+      parameters:
+      - description: Product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Message'
+      summary: Create Product
+      tags:
+      - products
+  /product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a product by id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Message'
+      summary: Delete Product
+      tags:
+      - products
+    put:
+      consumes:
+      - application/json
+      description: Update a product by id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Message'
+      summary: Update Product By Id
+      tags:
+      - products
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: Register Request
+        in: body
+        name: username
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.AuthResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.AuthResponse'
+      summary: Register User
+      tags:
+      - auth
+schemes:
+- http
+- https
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

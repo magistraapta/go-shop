@@ -19,5 +19,5 @@ func SetupOrder(router *gin.Engine, db *gorm.DB) {
 	orderService := services.NewOrderServices(orderRepo, productRepo, cartRepo)
 	orderHandler := handler.NewOrderHandler(orderService)
 
-	router.POST("/checkout", middleware.RoleMiddleware("user"), orderHandler.Checkout)
+	router.POST("/order/checkout", middleware.RoleMiddleware("user"), orderHandler.Checkout)
 }

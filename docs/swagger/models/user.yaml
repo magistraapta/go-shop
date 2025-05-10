@@ -1,0 +1,47 @@
+User:
+  type: object
+  properties:
+    id:
+      type: integer
+      format: uint
+      description: The unique identifier for the user
+    created_at:
+      type: string
+      format: date-time
+      description: The timestamp when the user was created
+    updated_at:
+      type: string
+      format: date-time
+      description: The timestamp when the user was last updated
+    deleted_at:
+      type: string
+      format: date-time
+      nullable: true
+      description: The timestamp when the user was deleted (if applicable)
+    username:
+      type: string
+      description: The unique username of the user
+    email:
+      type: string
+      format: email
+      description: The unique email address of the user
+    password:
+      type: string
+      format: password
+      description: The user's password (hashed)
+    role:
+      type: string
+      description: The role of the user in the system
+    cart:
+      $ref: '#/components/schemas/Cart'
+      description: The user's shopping cart
+    transactions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Transaction'
+      description: List of user's transactions
+  required:
+    - username
+    - email
+    - password
+    - role 

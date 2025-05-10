@@ -1,6 +1,7 @@
 package services
 
 import (
+	"golang-shop/internal/product/dto"
 	"golang-shop/internal/product/model"
 	"golang-shop/internal/product/repository"
 )
@@ -13,7 +14,7 @@ func NewProductServices(repo *repository.ProductRepository) *ProductServices {
 	return &ProductServices{repo: repo}
 }
 
-func (s *ProductServices) CreateProduct(productRequest model.Product) error {
+func (s *ProductServices) CreateProduct(productRequest dto.ProductRequest) error {
 	return s.repo.CreateProduct(productRequest)
 }
 
