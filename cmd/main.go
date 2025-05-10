@@ -42,12 +42,8 @@ import (
 // @securityDefinitions.apikey Bearer
 // @in header
 // @name Authorization
-func init() {
-	initializers.LoadEnv()
-	initializers.ConnectDatabase()
-}
-
 func main() {
+	initializers.LoadEnv()
 	db, err := initializers.ConnectDatabase()
 
 	if err != nil {
