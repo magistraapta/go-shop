@@ -16,18 +16,21 @@ func SetupAuth(router *gin.Engine, db *gorm.DB) {
 	authService := services.NewAuthService(authRepo)
 	authHandler := handler.NewAuthHandler(authService)
 
-	router.POST("/auth/login", authHandler.Login)
-
-	admin := router.Group("/admin")
+	auth := router.Group("api/v1/auth")
 	{
-		admin.POST("/register", authHandler.RegisterAdmin)
-		admin.GET("/dashboard", middleware.RoleMiddleware("admin"), func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{"message": "this is admin"})
-		})
-	}
+		auth.POST("/login", authHandler.Login)
 
-	user := router.Group("/user")
-	{
-		user.POST("/register", authHandler.RegisterUser)
+		admin := router.Group("/admin")
+		{
+			admin.POST("/register", authHandler.RegisterAdmin)
+			admin.GET("/dashboard", middleware.RoleMiddleware("admin"), func(ctx *gin.Context) {
+				ctx.JSON(http.StatusOK, gin.H{"message": "this is admin"})
+			})
+		}
+
+		user := router.Group("/user")
+		{
+			user.POST("/register", authHandler.RegisterUser)
+		}
 	}
 }

@@ -17,7 +17,7 @@ func SetupCart(router *gin.Engine, db *gorm.DB) {
 	services := services.NewCartServices(repo, productRepo)
 	cartHandler := handler.NewCartHandler(services)
 
-	cart := router.Group("/cart")
+	cart := router.Group("api/v1/cart")
 	{
 		cart.GET("/", middleware.RoleMiddleware("user"), cartHandler.GetCart)
 		cart.POST("/add", middleware.RoleMiddleware("user"), cartHandler.AddToCart)

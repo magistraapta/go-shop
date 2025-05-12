@@ -15,7 +15,7 @@ func ProductRouter(router *gin.Engine, db *gorm.DB) {
 	productServices := services.NewProductServices(productRepo)
 	productHandler := handler.NewProductHandler(productServices)
 
-	product := router.Group("/product")
+	product := router.Group("api/v1/product")
 	{
 		product.POST("/", middleware.RoleMiddleware("admin"), productHandler.CreateProduct)
 		product.GET("/:id", productHandler.GetProductById)
