@@ -3,8 +3,11 @@ version: '3.8'
 services:
   prometheus:
     image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
     ports:
       - '9090:9090'
     networks:
@@ -15,6 +18,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
+    restart: always
     ports:
       - "3000:3000"
     environment:
@@ -23,12 +27,15 @@ services:
       - monitoring
     depends_on:
       - prometheus
+    volumes:
+      - grafana:/var/lib/grafana
 
   backend:
-    container_name: "go-shop"
+    container_name: go-shop
+    restart: always
     build:
       context: .
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
@@ -39,8 +46,15 @@ services:
     environment:
       - DATABASE_CONFIG=host=db user=postgres password=postgres dbname=golang-shop port=5432 sslmode=disable
     networks:
-    - app-network
-
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # Removed volume mount to avoid overwriting multi-stage build result
+    # volumes:
+    #   - ./:/app
 
   db:
     image: postgres:16
