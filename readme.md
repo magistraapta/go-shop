@@ -66,5 +66,6 @@ The project follows clean architecture principles with clear boundaries between 
 - [x] add transaction model
 - [x] add swagger docs
 - [ ] Write test
-- [ ] Setup Docker
+- [x] Setup Docker
 - [ ] Setup Github Actions
+- [ ] Setup monitoring
